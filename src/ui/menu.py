@@ -1,4 +1,5 @@
 """DevBox CLI - Busca de dependências no NPM"""
+import subprocess
 from rich.console import Console
 from rich.prompt import Prompt
 from rich.panel import Panel
@@ -20,6 +21,7 @@ def search_npm(dependency: str) -> None:
         description = info.get("description", "No description available.")
         author = info.get("author", {}).get("name", "Unknown author")
         homepage = info.get("homepage", "No homepage available")
+        install_command = f"npm install {dependency}"
 
         console.print(
             Panel.fit(
@@ -28,11 +30,26 @@ def search_npm(dependency: str) -> None:
                 f"[cyan]Latest version:[/] {latest_version}\n"
                 f"[magenta]Author:[/] {author}\n"
                 f"[blue]Homepage:[/] {homepage}\n"
-                f"[bold white]Install:[/] [bold green]npm install {dependency}[/]",
+                f"[bold white]Install:[/] [bold green]{install_command}[/]",
                 title="📦 NPM Dependency Info",
                 border_style="bright_green"
             )
         )
+
+        # Simula um "botão" de instalar
+        choice = Prompt.ask(
+            "[bold yellow]Do you want to install this package?[/bold yellow]",
+            choices=["y", "n"],
+            default="n"
+        )
+        if choice.lower() == "y":
+            console.print(f"[bold cyan]Running:[/] {install_command}\n")
+            try:
+                subprocess.run(install_command, shell=True, check=True)
+                console.print(f"[bold green]✅ Package '{dependency}' installed successfully![/]")
+            except subprocess.CalledProcessError:
+                console.print(f"[bold red]❌ Failed to install '{dependency}'.[/]")
+
     else:
         console.print(f"[bold red]❌ Dependency '{dependency}' not found on NPM.[/]")
 
