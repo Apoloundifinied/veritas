@@ -1,7 +1,7 @@
 from rich.console import Console
 from rich.prompt import Prompt
 from src.ui.panels import get_banner
-
+from src.ui.menu import search_npm
 console = Console()
 
 def show_menu():
@@ -30,10 +30,6 @@ def show_menu():
 
         if registry == "npm":
             search_npm(dep)
-        else:
-            search_pypi(dep)
-
-        console.print("")  # linha em branco entre buscas
 
 
 if __name__ == "__main__":
