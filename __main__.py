@@ -1,7 +1,7 @@
 from rich.console import Console
 from rich.prompt import Prompt
 from src.ui.panels import get_banner
-from src.ui.menu import search_npm
+from src.ui.menu import search_npm, get_project_directory
 console = Console()
 
 def show_menu():
@@ -29,7 +29,7 @@ def show_menu():
         console.print(f"\n[bold cyan]Searching for dependency:[/] {dep}...\n")
 
         if registry == "npm":
-            search_npm(dep)
+            search_npm(dep, get_project_directory())
 
 
 if __name__ == "__main__":
